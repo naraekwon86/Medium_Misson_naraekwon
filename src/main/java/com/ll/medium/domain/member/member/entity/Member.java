@@ -16,6 +16,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -34,4 +40,15 @@ public class Member {
     private LocalDateTime modifyDate;
     private String username;
     private String password;
+
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+        if(List.of("system" , "admin").contains(username)){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            return authorities;
+        }
+    }
+
+
 }
