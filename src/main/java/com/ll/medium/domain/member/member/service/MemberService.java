@@ -8,12 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import com.ll.medium.global.rsData.RsData.RsData;
 import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public RsData<Member> join(String username,String password){
@@ -23,7 +25,7 @@ public class MemberService {
         if (findByUsername(username).isPresent()){
             return RsData.of("400-2","이미 존재하는 회원입니다.");
         }
-        Member member = new Member(username,password);
+        Member member = new Member(username,passwordEncoder.encode(password));
         memberRepository.save(member);
         return RsData.of("200","/%s님 환영합니다.회원가입이 완료되었습니다.로그인 후 이용해 주세요".formatted(member.getUsername()),member);
     }
