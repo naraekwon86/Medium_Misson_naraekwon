@@ -32,7 +32,9 @@ public class MemberController {
     public static class JoinForm{
         private String username;
         private String password;
+        private String passwordConfirm;
     }
+
     @PostMapping("/join")
     public String join(@Valid JoinForm joinForm){
         RsData<Member> joinRs = memberService.join(joinForm.getUsername(),joinForm.getPassword());
