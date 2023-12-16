@@ -10,9 +10,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RequiredArgsConstructor
 public class AdmHomeController {
     @GetMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String showMain(){
+    public String showMain()
+    {
         return "domain/home/home/adm/main";
     }
-
+    @GetMapping("/home/about")
+    public String showAbout(){
+        return "domain/home/home/adm/about";
+    }
 }
