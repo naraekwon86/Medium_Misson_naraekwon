@@ -6,6 +6,8 @@ import com.ll.medium.domain.post.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -32,6 +34,8 @@ public class PostService {
     public Optional<Post> findById(long id){
         return postRepository.findById(id);
     }
-
+    public Page<Post> search(String kw, Pageable pageable){
+        return postRepository.findByTitleContainingIgnoreCaseOrBodyContainingIgnoreCase(kw,kw,pageable);
+    }
 
 }
