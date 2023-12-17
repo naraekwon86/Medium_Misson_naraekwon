@@ -10,6 +10,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findTop30ByIsPublishedOrderByIdDesc(boolean isPublished);
 
-    Page<Post> findByIsPublishedAndTitleContainingIgnoreCaseOrBodyContainingIgnoreCase(boolean isPublished ,String kw, String kw_ ,Pageable pageable);
+    Page<Post> findByIsPublishedAndTitleContainingIgnoreCaseOrIsPublishedAndBodyContainingIgnoreCase(
+            boolean isPublished ,String kw, boolean isPublished_,String kw_ ,Pageable pageable);
 
 }
