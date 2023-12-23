@@ -14,6 +14,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.access.prepost.PreAuthorize;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.web.bind.annotation.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,5 +53,43 @@ public class PostController {
 
         return "domain/post/post/list";
     }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myList")
+    public String showMyList(
+            @RequestParam(defaultValue = "") String kw,
+            @RequestParam(defaultValue = "1") int page
+    ){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
 
+        Page<Post> postPage = postService.search(rq.getMember() , kw , pageable);
+        rq.setAttribute("postPage", postPage);
+        rq.setAttribute("page" , page);
+
+        return "domain/post/post/myList";
+
+    }
+    @Getter
+    @Setter
+    public static class WriteForm{
+        @NotBlank
+        private String title;
+        @NotBlank
+        private String body;
+        private boolean isPublished;
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/write")
+    public String showWrite(){
+        return "domain/post/post/write";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/write")
+    public String write(@Valid WriteForm form){
+        Post post = postService.write(rq.getMember(), form.getTitle(), form.getBody(), form.isPublished());
+
+        return rq.redirect("/post/" + post.getId(), post.getId() + "번 글이 작성되었습니다.");
+
+    }
 }

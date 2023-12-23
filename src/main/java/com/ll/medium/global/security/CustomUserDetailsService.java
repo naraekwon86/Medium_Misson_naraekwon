@@ -1,5 +1,6 @@
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.member.member.repository.MemberRepository;
+import com.ll.medium.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         Member member = opMember.get();
 
-        return new User(
+        return new SecurityUser(
+                member.getId(),
                 member.getUsername(),
                 member.getPassword(),
                 member.getAuthorities()
