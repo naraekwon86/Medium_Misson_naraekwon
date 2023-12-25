@@ -21,6 +21,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.bind.annotation.*;
+import com.ll.medium.global.exceptions.GlobalException;
+import org.springframework.ui.Model;
 
 
 import java.util.ArrayList;
@@ -70,6 +72,11 @@ public class PostController {
         return "domain/post/post/myList";
 
     }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/write")
+    public String showWrtie(){
+        return "domain/post/post/write";
+    }
     @Getter
     @Setter
     public static class WriteForm{
@@ -80,11 +87,6 @@ public class PostController {
         private boolean isPublished;
     }
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/write")
-    public String showWrite(){
-        return "domain/post/post/write";
-    }
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String write(@Valid WriteForm form){
         Post post = postService.write(rq.getMember(), form.getTitle(), form.getBody(), form.isPublished());
@@ -92,4 +94,34 @@ public class PostController {
         return rq.redirect("/post/" + post.getId(), post.getId() + "번 글이 작성되었습니다.");
 
     }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/modify")
+    public String showModify(@PathVariable long id, Model model){
+        Post post = postService.findById(id).orElseThrow(() ->new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
+        if (!postService.canModify(rq.getMember() , post)) throw new GlobalException("403-1", "권한이 없습니다.");
+        model.addAttribute("post",post);
+        return "domain/post/post/modify";
+    }
+
+    @Getter
+    @Setter
+    public static class ModifyForm{
+        @NotBlank
+        private String title;
+        @NotBlank
+        private String body;
+        private boolean isPublished;
+    }
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id}/modify")
+    public String modify(@PathVariable long id, @Valid ModifyForm form){
+        Post post = postService.findById(id).orElseThrow(() -> new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
+        if (!postService.canModify(rq.getMember(), post)) throw new GlobalException("403-1","권한이 없습니다.");
+
+        postService.modify(post,form.getTitle(), form.getBody() , form.isPublished());
+
+        return rq.redirect("/post/" + post.getId(), post.getId() +"번 글이 수정되었습니다.");
+    }
+
+
 }
