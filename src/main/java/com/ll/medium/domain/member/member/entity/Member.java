@@ -41,14 +41,18 @@ public class Member {
     private String username;
     private String password;
 
-    public Collection<? extends GrantedAuthority> getAuthorities(){
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
-        if(List.of("system" , "admin").contains(username)){
+        if (List.of("system", "admin").contains(username)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            return authorities;
+
         }
+        return authorities;
     }
+    public boolean isAdmin(){
+        return getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-
+    }
 }

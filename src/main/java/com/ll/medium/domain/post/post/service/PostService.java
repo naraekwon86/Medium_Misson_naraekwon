@@ -44,11 +44,20 @@ public class PostService {
     public boolean canModify(Member actor, Post post){
         return actor.equals(post.getAuthor());
     }
+    public boolean canDelete(Member actor, Post post){
+        if (actor.isAdmin()) return true;
+        return actor.equals(post.getAuthor());
+    }
     @Transactional
     public void modify(Post post, String title, String body, boolean published){
         post.setTitle(title);
         post.setBody(body);
         post.setPublished(published);
     }
+    @Transactional
+    public void delete(Post post){
+        postRepository.delete(post);
+    }
+
 
 }
