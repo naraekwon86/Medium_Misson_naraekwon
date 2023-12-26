@@ -110,6 +110,10 @@ public class PostService {
     public void modifyComment(PostComment postComment, String body){
         postComment.setBody(body);
     }
+    @Transactional
+    public void deleteComment(PostComment postComment){
+        postCommentRepository.delete(postComment);
+    }
 
 
 }
