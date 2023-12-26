@@ -132,7 +132,29 @@ public class PostController {
         if (!postService.canDelete(rq.getMember(), post)) throw new GlobalException("403-1","권한이 없습니다.");
         postService.delete(post);
         return rq.redirect("/post/list", post.getId() + "번 글이 삭제되었습니다.");
+    }
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}/like")
+    public String like(@PathVariable long id){
+        Post post = postService.findById(id).orElseThrow(()->new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
 
+        if (!postService.canLike(rq.getMember(), post)) throw new GlobalException("403-1","권한이 없습니다.");
+
+        postService.like(rq.getMember(),post);
+
+        return rq.redirect("/post/" + post.getId(), post.getId() + "번 글을 추천하였습니다.");
+
+    }
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}/cancelLike")
+    public String cancelLike(@PathVariable long id){
+        Post post = postService.findById(id).orElseThrow(()->new GlobalException("403-1","해당 글이 존재하지 않습니다."));
+
+        if (!postService.cancelLike(rq.getMember() , post)) throw new GlobalException("403-1","권한이 없습니다.");
+
+        postService.cancelLike(rq.getMember(), post);
+
+        return rq.redirect("/post/" + post.getId(), post.getId() + "번 글을 추천 취소하였습니다.");
 
     }
 

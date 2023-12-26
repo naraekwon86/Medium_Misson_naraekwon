@@ -41,7 +41,7 @@ public class Post extends BaseEntity{
     public void increaseHit(){
         hit++;
     }
-    public void like(Member member){
+    public void addlike(Member member){
         if (hasLike(member)){
             return;
         }
@@ -54,7 +54,7 @@ public class Post extends BaseEntity{
         return likes.stream()
                 .anyMatch(postLike -> postLike.getMember().equals(member));
     }
-    public void cancelLike(Member member){
+    public void deleteLike(Member member){
         likes.removeIf(postLike -> postLike.getMember().equals(member));
     }
 

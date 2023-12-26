@@ -25,6 +25,14 @@
   <div>
     <button onclick="history.back();">뒤로가기</button>
     <a th:if="${@postService.canModify(@rq.member,post)}" th:href="|/post/${post.id}/modify|">글 수정</a>
+    <a th:if="${@postService.canLike(@rq.member, post)}"
+       th:href="|/post/${post.id}/like|" methods="POST">
+      추천
+    </a>
+    <a th:if="${@postService.canCancelLike(@rq.member, post)}"
+       th:href="|/post/${post.id}/cancelLike|" methods="DELETE">
+      추천취소
+    </a>
     <form style="display: contents"
           th:if="${@postService.canDelete(@rq.member, post)}"
           th:action="|/post/${post.id}/delete|"
