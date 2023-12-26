@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static jakarta.persistence.CascadeType.ALL;
 import com.ll.medium.domain.post.postComment.entity.PostComment;
+import jakarta.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -35,11 +36,13 @@ public class Post extends BaseEntity{
 
     @OneToMany(mappedBy = "post", cascade = ALL , orphanRemoval = true)
     @Builder.Default
+    @OrderBy("id DESC")
     private List<PostComment> comments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member author;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String body;
     private boolean isPublished;
     @Setter(PROTECTED)

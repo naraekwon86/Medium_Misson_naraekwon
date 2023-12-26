@@ -6,7 +6,7 @@ import com.ll.medium.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
-
+import jakarta.persistence.Column;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -20,6 +20,7 @@ public class PostComment extends BaseEntity {
     private Member author;
     @ManyToOne
     private Post post;
+    @Column(columnDefinition = "TEXT")
     private String body;
 
 

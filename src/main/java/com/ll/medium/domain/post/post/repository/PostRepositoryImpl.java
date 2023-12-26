@@ -53,7 +53,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return PageableExecutionUtils.getPage(postsQuery.fetch(), pageable,totalQuery::fetchCount);
     }
     @Override
-    public Page<Post> search(Member author, Boolean Published ,String kw, Pageable pageable){
+    public Page<Post> search(Member author, Boolean isPublished ,String kw, Pageable pageable){
         //조건 생성
         BooleanExpression condition = post
                 .author.eq(author);

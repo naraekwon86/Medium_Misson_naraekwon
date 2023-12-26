@@ -56,10 +56,10 @@ public class Rq {
 
         return redirect(path,rs.getMsg());
     }
-    public User SecurityUser getUser(){
+    public SecurityUser getUser() {
         return Optional.ofNullable(SecurityContextHolder.getContext())
-                .map(securityContext :: getAuthentication)
-                .map(getAuthentication :: getPrincipal)
+                .map(SecurityContext::getAuthentication)
+                .map(Authentication::getPrincipal)
                 .filter(it -> it instanceof SecurityUser)
                 .map(it -> (SecurityUser) it)
                 .orElse(null);
