@@ -59,5 +59,9 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    @Transactional
+    public void increaseHit(Post post){
+        post.increaseHit();
+    }
 
 }

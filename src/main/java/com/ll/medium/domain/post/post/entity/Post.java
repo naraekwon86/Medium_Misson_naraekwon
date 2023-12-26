@@ -32,5 +32,9 @@ public class Post {
     private String title;
     private String body;
     private boolean isPublished;
-
+    @Setter(PROTECTED)
+    private long hit;
+    public void increaseHit(){
+        hit++;
+    }
 }
