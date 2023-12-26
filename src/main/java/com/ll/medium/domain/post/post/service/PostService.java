@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import com.ll.medium.domain.post.postComment.entity.PostComment;
 
 import java.util.Optional;
 
@@ -84,6 +85,10 @@ public class PostService {
     @Transactional
     public void cancelLike(Member actor. Post post){
         post.deleteLike(actor);
+    }
+    @Transactional
+    public PostComment writeComment(Member actor, Post post, String body){
+        return post.writeComment(actor,body);
     }
 
 }

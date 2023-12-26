@@ -20,6 +20,8 @@ import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import static jakarta.persistence.CascadeType.ALL;
+import com.ll.medium.domain.post.postComment.entity.PostComment;
+
 @Entity
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
@@ -30,6 +32,10 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy = "post",cascade = ALL, orphanRemoval = true)
     @Builder.Default
     private List<PostLike> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = ALL , orphanRemoval = true)
+    @Builder.Default
+    private List<PostComment> comments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member author;
@@ -57,6 +63,14 @@ public class Post extends BaseEntity{
     public void deleteLike(Member member){
         likes.removeIf(postLike -> postLike.getMember().equals(member));
     }
-
+    public PostComment writeComment(Member actor, String body){
+        PostComment postComment = PostComment.builder()
+                .post(this)
+                .author(actor)
+                .body(body)
+                .build();
+        comments.add(postComment);
+        return postComment;
+    }
 
 }
