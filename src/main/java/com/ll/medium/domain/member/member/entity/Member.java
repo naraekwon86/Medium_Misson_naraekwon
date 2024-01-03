@@ -35,20 +35,23 @@ import jakarta.persistence.Transient;
 public class Member extends BaseEntity {
     private String username;
     private String password;
+    private boolean isPaid;
 
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+        if (isPaid){
+            authorities.add(new SimpleGrantedAuthority("ROLE_PAID"));
+        }
         if (List.of("system", "admin").contains(username)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-
         }
         return authorities;
     }
     public boolean isAdmin(){
         return getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
     }
+
 }
