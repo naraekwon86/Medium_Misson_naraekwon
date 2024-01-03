@@ -6,6 +6,10 @@
 <div layout:fragment="content">
   <h1>글내용</h1>
   <div>
+    <h3>유료멤버십</h3>
+    <div th:text = "${post.isPaid(true)}"
+         th:href = "|/post/${post.paid}/paid|"
+    ></div>
     <h3>조회수</h3>
     <div th:text="${#numbers.formatInteger(post.hit,3,'COMMA')}"></div>
   </div>

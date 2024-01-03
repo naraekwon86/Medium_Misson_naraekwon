@@ -35,6 +35,11 @@ public class PostController {
     private final PostService postService;
     private final Rq rq;
 
+    @GetMapping("/list")
+    public String showAllmember(){
+        return "domain/post/post/list";
+    }
+
     @GetMapping("/{id}")
     public String showDetail(@PathVariable long id){
         Post post = postService.findById(id).orElseThrow(()->new GlobalException("404-1","해당 글이 존재하지 않습니다."));
@@ -157,6 +162,7 @@ public class PostController {
         return rq.redirect("/post/" + post.getId(), post.getId() + "번 글을 추천 취소하였습니다.");
 
     }
+
 
 
 }
