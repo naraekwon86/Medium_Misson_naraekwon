@@ -27,6 +27,7 @@ public class Rq {
     private final HttpServletResponse response;
     private final EntityManager entityManager;
     private Member member;
+
     public String redirect(String url , String msg){
         String[] urlBits = url.split("#",2);
         url = urlBits[0];
